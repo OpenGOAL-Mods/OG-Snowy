@@ -774,8 +774,35 @@
       (set! (-> this entity extra perm task) (game-task complete))))
   (initialize-skeleton this *money-sg* '())
   (if (-> this entity) (nav-mesh-connect this (-> this root) (the-as nav-control #f)))
-  (set-vector! (-> this draw color-mult) 0.8 0.8 0.8 1.0)
-  (set-vector! (-> this draw color-emissive) 0.2 0.2 0.2 1.0)
+  (case (rand-vu-int-range 0 8)
+    ((0) ; Silver
+      (set-vector! (-> this draw color-mult) 0.8 0.8 0.8 1.0)
+      (set-vector! (-> this draw color-emissive) 0.2 0.2 0.2 1.0))
+    ((1) ; Gold
+      (set-vector! (-> this draw color-mult) 1.0 0.5 0.0 1.0)
+      (set-vector! (-> this draw color-emissive) 0.4 0.5 0.2 1.0))
+    ((2) ; Purple
+      (set-vector! (-> this draw color-mult) 0.6 0.0 1.0 1.0)
+      (set-vector! (-> this draw color-emissive) 0.2 0.2 0.6 1.0))
+    ((3) ; Neon Green
+      (set-vector! (-> this draw color-mult) 0.0 0.8 0.0 1.0)
+      (set-vector! (-> this draw color-emissive) 0.1 0.8 0.1 1.0))
+    ((4) ; Red
+      (set-vector! (-> this draw color-mult) 0.8 0.0 0.0 1.0)
+      (set-vector! (-> this draw color-emissive) 0.6 0.1 0.1 1.0))
+    ((5) ; Light Blue
+      (set-vector! (-> this draw color-mult) 0.0 1.0 1.0 1.0)
+      (set-vector! (-> this draw color-emissive) 0.0 0.5 0.9 1.0))
+    ((6) ; Magenta
+      (set-vector! (-> this draw color-mult) 1.0 0.0 0.5 1.0)
+      (set-vector! (-> this draw color-emissive) 0.6 0.4 0.4 1.0))
+    ((7) ; Orange
+      (set-vector! (-> this draw color-mult) 1.0 0.3 0.0 1.0)
+      (set-vector! (-> this draw color-emissive) 1.0 0.3 0.2 1.0))
+    ((8) ; Dark Blue
+      (set-vector! (-> this draw color-mult) 0.0 0.2 1.0 1.0)
+      (set-vector! (-> this draw color-emissive) 0.0 0.1 1.0 1.0))
+  )
   ;; og:preserve-this added money starburst
   (set! (-> this part) (create-launch-control (-> *part-group-id-table* 64) this))
   this)
