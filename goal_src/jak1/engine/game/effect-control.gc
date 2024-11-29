@@ -12,7 +12,21 @@
 (define *debug-effect-control* #f)
 
 (defun sound-name-with-material ((arg0 symbol) (arg1 pat-surface) (arg2 string))
-  (string->sound-name (string-format "~S-~S~S" arg0 (enum->string pat-material (-> arg1 material)) arg2)))
+  (cond 
+    ((= arg0 'walk)
+      (if (or (= (pat-material grass) (-> arg1 material)) 
+              (= (pat-material sand) (-> arg1 material)))
+        (begin 
+          (when *debug-effect-control* (format 0 "snow sound injection has occured!~%"))
+          (string->sound-name (string-format "walk-snow~S" arg2)))
+        (string->sound-name (string-format "~S-~S~S" arg0 (enum->string pat-material (-> arg1 material)) arg2))))
+    ((= arg0 'land)
+      (if (or (= (pat-material grass) (-> arg1 material)) (= (pat-material sand) (-> arg1 material)))
+        (begin (when *debug-effect-control* (format 0 "snow sound injection has occured!~%")) (string->sound-name "land-snow"))
+        (string->sound-name (string-format "~S-~S~S" arg0 (enum->string pat-material (-> arg1 material)) arg2))))
+    (else
+      (string->sound-name (string-format "~S-~S~S" arg0 (enum->string pat-material (-> arg1 material)) arg2))))
+  )
 
 (defun effect-param->sound-spec ((arg0 sound-spec) (arg1 (pointer float)) (arg2 int))
   (while (> arg2 0)
@@ -267,7 +281,7 @@
                   (v1-15 (-> arg4 material)))
              (t9-8 a0-13
                    (cond
-                     ((= v1-15 (pat-material sand)) 'group-land-poof-sand)
+                     ((= v1-15 (pat-material sand)) 'group-land-poof-snow)
                      ((= v1-15 (pat-material wood)) 'group-land-poof-wood)
                      ((= v1-15 (pat-material crwood)) 'group-land-poof-crwood)
                      ((or (= v1-15 (pat-material tube)) (= v1-15 (pat-material pcmetal))) 'group-land-poof-pcmetal)
@@ -283,7 +297,7 @@
                      ((= v1-15 (pat-material straw)) 'group-land-poof-straw)
                      ((= v1-15 (pat-material swamp)) 'group-land-poof-swamp)
                      ((= v1-15 (pat-material neutral)) 'group-land-poof-neutral)
-                     (else 'group-land-poof-grass))
+                     (else 'group-land-poof-snow))
                    arg1
                    -1))))
         (('effect-run-poof)
@@ -293,7 +307,7 @@
                   (v1-20 (-> arg4 material)))
              (t9-9 a0-14
                    (cond
-                     ((= v1-20 (pat-material sand)) 'group-run-poof-sand)
+                     ((= v1-20 (pat-material sand)) 'group-run-poof-snow)
                      ((= v1-20 (pat-material wood)) 'group-run-poof-wood)
                      ((= v1-20 (pat-material crwood)) 'group-run-poof-crwood)
                      ((or (= v1-20 (pat-material tube)) (= v1-20 (pat-material pcmetal))) 'group-run-poof-pcmetal)
@@ -309,7 +323,7 @@
                      ((= v1-20 (pat-material straw)) 'group-run-poof-straw)
                      ((= v1-20 (pat-material swamp)) 'group-run-poof-swamp)
                      ((= v1-20 (pat-material neutral)) 'group-run-poof-neutral)
-                     (else 'group-run-poof-grass))
+                     (else 'group-run-poof-snow))
                    arg1
                    -1))))
         (('effect-just-footprint)
@@ -318,7 +332,7 @@
                 (v1-24 (-> arg4 material)))
            (t9-10 a0-15
                   (cond
-                    ((= v1-24 (pat-material sand)) 'group-just-footprint-sand)
+                    ((= v1-24 (pat-material sand)) 'group-just-footprint-snow)
                     ((= v1-24 (pat-material wood)) 'group-just-footprint-wood)
                     ((= v1-24 (pat-material crwood)) 'group-just-footprint-crwood)
                     ((or (= v1-24 (pat-material tube)) (= v1-24 (pat-material pcmetal))) 'group-just-footprint-pcmetal)
@@ -334,7 +348,7 @@
                     ((= v1-24 (pat-material straw)) 'group-just-footprint-straw)
                     ((= v1-24 (pat-material swamp)) 'group-just-footprint-swamp)
                     ((= v1-24 (pat-material neutral)) 'group-just-footprint-neutral)
-                    (else 'group-just-footprint-grass))
+                    (else 'group-just-footprint-snow))
                   arg1
                   -1)))
         (('effect-just-poof)
@@ -344,7 +358,7 @@
                   (v1-29 (-> arg4 material)))
              (t9-11 a0-16
                     (cond
-                      ((= v1-29 (pat-material sand)) 'group-just-poof-sand)
+                      ((= v1-29 (pat-material sand)) 'group-just-poof-snow)
                       ((= v1-29 (pat-material wood)) 'group-just-poof-wood)
                       ((= v1-29 (pat-material crwood)) 'group-just-poof-crwood)
                       ((or (= v1-29 (pat-material tube)) (= v1-29 (pat-material pcmetal))) 'group-just-poof-pcmetal)
@@ -360,7 +374,7 @@
                       ((= v1-29 (pat-material straw)) 'group-just-poof-straw)
                       ((= v1-29 (pat-material swamp)) 'group-just-poof-swamp)
                       ((= v1-29 (pat-material neutral)) 'group-just-poof-neutral)
-                      (else 'group-just-poof-grass))
+                      (else 'group-just-poof-snow))
                     arg1
                     -1))))
         (('effect-slide-poof)
@@ -369,7 +383,7 @@
                 (v1-33 (-> arg4 material)))
            (t9-12 a0-19
                   (cond
-                    ((= v1-33 (pat-material sand)) 'group-slide-poof-sand)
+                    ((= v1-33 (pat-material sand)) 'group-slide-poof-snow)
                     ((= v1-33 (pat-material wood)) 'group-slide-poof-wood)
                     ((= v1-33 (pat-material crwood)) 'group-slide-poof-crwood)
                     ((or (= v1-33 (pat-material tube)) (= v1-33 (pat-material pcmetal))) 'group-slide-poof-pcmetal)
@@ -385,13 +399,13 @@
                     ((= v1-33 (pat-material straw)) 'group-slide-poof-straw)
                     ((= v1-33 (pat-material swamp)) 'group-slide-poof-swamp)
                     ((= v1-33 (pat-material neutral)) 'group-slide-poof-neutral)
-                    (else 'group-slide-poof-grass))
+                    (else 'group-slide-poof-snow))
                   arg1
                   -1)))
         (('effect-droppings)
          (let* ((v1-36 (-> arg4 material))
                 (s0-0 (cond
-                        ((= v1-36 (pat-material sand)) (-> *part-id-table* 95))
+                        ((= v1-36 (pat-material sand)) (-> *part-id-table* 2250)) ;; changed from 95
                         ((= v1-36 (pat-material wood)) (-> *part-id-table* 97))
                         ((= v1-36 (pat-material crwood)) (-> *part-id-table* 99))
                         ((or (= v1-36 (pat-material tube)) (= v1-36 (pat-material pcmetal))) (-> *part-id-table* 2248))
@@ -407,7 +421,7 @@
                         ((= v1-36 (pat-material straw)) (-> *part-id-table* 2256))
                         ((= v1-36 (pat-material swamp)) (-> *part-id-table* 2257))
                         ((= v1-36 (pat-material neutral)) (-> *part-id-table* 2773))
-                        (else (-> *part-id-table* 96)))))
+                        (else (-> *part-id-table* 2250))))) ;; changed from 96
            (when (nonzero? s0-0)
              (set! sv-48 sp-launch-particles-var)
              (set! sv-64 *sp-particle-system-2d*)
@@ -419,7 +433,7 @@
         (('effect-jump-droppings)
          (let* ((v1-61 (-> arg4 material))
                 (s0-1 (cond
-                        ((= v1-61 (pat-material sand)) (-> *part-id-table* 106))
+                        ((= v1-61 (pat-material sand)) (-> *part-id-table* 2262))  ;; changed from 106
                         ((= v1-61 (pat-material wood)) (-> *part-id-table* 2258))
                         ((= v1-61 (pat-material crwood)) (-> *part-id-table* 2259))
                         ((or (= v1-61 (pat-material tube)) (= v1-61 (pat-material pcmetal))) (-> *part-id-table* 2260))
@@ -435,7 +449,7 @@
                         ((= v1-61 (pat-material straw)) (-> *part-id-table* 2269))
                         ((= v1-61 (pat-material swamp)) (-> *part-id-table* 2270))
                         ((= v1-61 (pat-material neutral)) (-> *part-id-table* 2774))
-                        (else (-> *part-id-table* 107)))))
+                        (else (-> *part-id-table* 2262))))) ;;changed from 107
            (when (nonzero? s0-1)
              (set! sv-80 sp-launch-particles-var)
              (set! sv-96 *sp-particle-system-2d*)

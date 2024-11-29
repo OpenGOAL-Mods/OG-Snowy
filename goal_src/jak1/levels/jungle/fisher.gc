@@ -1526,7 +1526,7 @@
   (set! (-> this music) 'fishgame)
   (set! (-> this difficulty) (the-as int (-> this entity extra perm user-uint8 6)))
   (set! (-> this hard) #f)
-  (set! (-> *FISHER-bank* max-caught) 200)
+  (set! (-> *FISHER-bank* max-caught) 222)
   (set! (-> this training) #f)
   (process-taskable-method-42 this)
   (none))

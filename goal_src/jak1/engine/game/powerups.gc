@@ -453,9 +453,6 @@
       (('snow 'village1 'jungle 'village2 'training 'beach 'rolling 'ogre 'swamp 'title 'firecanyon 'village3)
         (update-snow self)
 	      (set-time-of-day 23.0))
-      (('firecanyon)
-        (update-snoww self)
-	      (set-time-of-day 23.0))
       ))
   (cond
     ((and (= (-> self control ground-pat material) (pat-material ice))
